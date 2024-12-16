@@ -1,0 +1,216 @@
+HTML CODE
+<link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Animated Tabs</title>
+  </head>
+  <body>
+    <div class="overlay"></div>
+    <div class="nav">
+      <ul class="tabs">
+        <li class="tabs-item tab tab-comment tab-is-active">
+          <div class="tab-circle"></div>
+          <i class="fa fa-comment tab-icon"></i>
+          <span class="tab-name">Comment</span>
+        </li>
+        
+        <li class="tabs-item tab tab-clipboard">
+          <div class="tab-circle"></div>
+          <i class="fa fa-clipboard tab-icon"></i>
+          <span class="tab-name">Clipboard</span>
+        </li>
+        <li class="tabs-item tab tab-burn">
+          <div class="tab-circle"></div>
+          <i class="fa fa-cloud-upload tab-icon" ></i>
+          <span class="tab-name">Upload</span>
+        </li>
+        <li class="tabs-item tab tab-bell">
+          <div class="tab-circle"></div>
+          <i class="fa fa-bell tab-icon"></i>
+          <span class="tab-name">Notifications</span>
+        </li>
+        <li class="tabs-item tab tab-bookmark ">
+          <div class="tab-circle"></div>
+          <i class="fa fa-bookmark tab-icon"></i>
+          <span class="tab-name">Bookmark</span>
+        </li>
+        
+      </ul>
+    </div>
+    <br>
+     <br>
+    
+  </body>
+  <!-- gsap CDN -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
+    integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+
+
+CSS CODE
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=cyrillic");
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.overlay {
+    height: 200vw;
+    width: 200vw;
+    border-radius: 50%;
+    background-color: #000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nav {
+    background-color: #fff;
+    padding: 12px 5px;
+    border-radius: 15px;
+    box-shadow: 3px 3px 15px rgba(179, 179, 179, 0.185);
+    position: relative;
+    z-index: 99;
+}
+
+.tabs {
+    display: flex;
+    width: 490px;
+    justify-content: space-around;
+    list-style-type: none;
+}
+
+.tab {
+    padding: 12px 22px;
+    background-color: #e0efff;
+    color: #58a6ff;
+    margin-right: 15px;
+    border-radius: 55px;
+    text-align: center;
+    white-space: nowrap;
+    transition: 0.3s ease;
+    overflow: hidden;
+    max-width: 0px;
+    cursor: pointer;
+    position: relative;
+    flex-basis: 120px;
+}
+
+.tab-is-active {
+    max-width: 100px;
+    box-shadow: 7px 7px 15px rgba(124, 124, 124, 0.096);
+}
+
+.tab-is-active .tab-name {
+    opacity: 1;
+}
+
+.tab-circle {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: 2px solid #95c5fd;
+    z-index: 10;
+    opacity: 0;
+    left: 30px;
+    pointer-events: none;
+}
+
+.tab-icon {
+    margin-right: 1px;
+    font-size: 18px;
+    vertical-align: middle;
+    position: relative;
+    right: 6.7px;
+    top: -1px;
+}
+
+.tab-name {
+    font-family: "Ubuntu", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    position: relative;
+    transition: 0.3s ease;
+    top: 1px;
+    opacity: 0;
+}
+
+.tab-bookmark {
+    background: #cffcff;
+    color: #009ffb;
+}
+
+.tab-burn {
+    background: #f1ddff;
+    color: #8f44fd;
+}
+
+
+.tab-clipboard {
+    background: #ecd1dd;
+    color: #d93479;
+}
+
+.tab-comment {
+    background: #eee0ca;
+    color: #d3be3a;
+}
+
+
+
+
+
+JS CODE
+let tabs = document.querySelectorAll(".tab");
+let overlay = document.querySelector(".overlay");
+
+let firstActive = document.querySelector(".tab-is-active");
+let activeColor = getComputedStyle(firstActive).color;
+overlay.style.background = activeColor;
+document.body.style.background = activeColor;
+
+tabs.forEach((tab) => {
+  tab.addEventListener("click", function () {
+    let tl = new TimelineLite();
+
+    let accentColor = getComputedStyle(this).color;
+    this.children[0].style.borderColor = accentColor;
+    if (!this.classList.contains("tab-is-active")) {
+      tl.fromTo(
+        this.children[0],
+        0.1,
+        { scale: 0, opacity: 1 },
+        { scale: 3, opacity: 0 },
+        "0"
+      );
+      overlay.style.background = accentColor;
+      tl.fromTo(
+        overlay,
+        1,
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1 },
+        "0"
+      );
+    }
+    tabs.forEach((tab) => {
+      tab.classList.remove("tab-is-active");
+      this.classList.add("tab-is-active");
+    });
+  });
+});
